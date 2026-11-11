@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <RootNamespace>DevStackStudio.Infrastructure</RootNamespace>
+    <Description>Docker, process execution, filesystem, and environment detection.</Description>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DevStackStudio.Core\DevStackStudio.Core.csproj" />
+  </ItemGroup>
+</Project>

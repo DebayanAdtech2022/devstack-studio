@@ -1,0 +1,420 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:DevStackStudio.App.ViewModels"
+        xmlns:m="using:DevStackStudio.Core.Models"
+        x:Class="DevStackStudio.App.Views.MainWindow"
+        x:Name="RootWindow"
+        x:DataType="vm:MainViewModel"
+        Title="DevStack Studio — Cross-Platform Application Generator"
+        Width="1200" Height="800"
+        MinWidth="960" MinHeight="640"
+        WindowStartupLocation="CenterScreen"
+        Background="#0F172A">
+
+  <Grid RowDefinitions="Auto,*,Auto">
+    <!-- Header -->
+    <Border Grid.Row="0" Background="#1E293B" Padding="20,14" BorderBrush="#334155" BorderThickness="0,0,0,1">
+      <Grid ColumnDefinitions="Auto,*,Auto">
+        <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="14">
+          <!-- Adtech Brand Logo -->
+          <Border Background="#FFFFFF" CornerRadius="8" Padding="6,3" VerticalAlignment="Center" BoxShadow="0 2 8 0 #20000000">
+            <Viewbox Width="96" Height="28" Stretch="Uniform">
+              <Canvas Width="132" Height="40">
+                <!-- Adtech Orange/Yellow Flame Symbol -->
+                <Path Fill="#F59E0B" Data="M22.6,37.56 L18.59,35.76 C14.59,33.91 10.36,30.91 8.7,26.24 L16.79,23.06 L20.14,31.57 L23.26,30.34 L13.86,6.75 C15.37,4.64 17.2,2.4 19.39,0 C17,0.06 14.56,0.56 12.22,1.55 C2.56,5.59 -2.36,16.62 1.11,26.5 C3.55,33.47 9.43,38.19 16.12,39.49 C17.48,39.79 18.89,39.97 20.33,39.99 C22.39,40.03 24.39,39.75 26.28,39.22 L22.6,37.56 Z" />
+                <Path Fill="#94A3B8" Data="M20.44,0.15 C28.57,-0.06 36.35,4.76 39.5,12.77 C42.96,21.55 39.76,31.3 32.32,36.45 C48.86,9.68 18.33,2.54 18.33,2.54 C19,1.76 19.7,0.96 20.44,0.15 Z" />
+                <Path Fill="#CBD5E1" Data="M18.33,2.54 C18.33,2.54 48.87,9.69 32.32,36.45 C31.08,37.31 29.73,38.04 28.26,38.62 C31.63,34.19 33.03,30.23 33.12,26.73 C38.39,13.22 19.56,6.58 19.56,6.58 L20.91,9.78 C17.59,7.87 14.89,6.92 14.89,6.92 C15.89,5.52 17.04,4.06 18.33,2.54 Z" />
+                <!-- Adtech Wordmark -->
+                <Path Fill="#0F172A" Data="M60.64,26.01h-2.8v-3.81h-7.39v-2.8h7.39v-1.68c0-.61-.2-.91-.61-.91h-7.95c-.39,0-.59.3-.59.91v8.31h-2.8v-8.31c0-1.01.31-1.88.95-2.61.63-.73,1.44-1.09,2.44-1.09h7.95c1.02,0,1.83.37,2.47,1.09.63.73.95,1.61.95,2.61v8.31h0Z M75.01,22.2c0,1.09-.38,2-1.13,2.72-.76.72-1.68,1.08-2.77,1.08h-9.28v-7.58h2.8v4.77h6.5c.72,0,1.08-.33,1.08-1v-4.41c0-.67-.36-1-1.08-1h-9.31v-2.8h9.28c1.09,0,2.01.36,2.77,1.08.76.72,1.13,1.63,1.13,2.72v4.41h0Z M89.85,16.79h-5.43v9.22h-2.8v-9.22h-5.43v-2.8h13.66v2.8h0Z M103.69,16.79h-10.03v1.81h9.38v2.8h-9.38v1.81h10.02v2.8h-12.82v-12.02h12.85v2.8h0Z M118.11,26.01h-9.31c-1.09,0-2.02-.36-2.78-1.08s-1.15-1.63-1.15-2.72v-4.41c0-1.09.38-2,1.15-2.72.76-.72,1.69-1.08,2.78-1.08h9.31v2.8h-9.31c-.75,0-1.12.33-1.12,1v4.41c0,.67.37,1,1.12,1h9.31v2.8Z M132.11,26.01h-2.8v-4.61h-7.23v4.61h-2.8v-12.02h2.8v4.61h7.23v-4.61h2.8v12.02Z" />
+              </Canvas>
+            </Viewbox>
+          </Border>
+
+          <StackPanel VerticalAlignment="Center">
+            <TextBlock Text="DevStack Studio" FontSize="18" FontWeight="Bold" Foreground="#F8FAFC" />
+            <TextBlock Text="Control Plane — App Generator &amp; Docker Manager" FontSize="11" Foreground="#94A3B8" />
+          </StackPanel>
+        </StackPanel>
+
+        <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="16" VerticalAlignment="Center">
+          <Border Background="#0F172A" CornerRadius="6" Padding="10,6" BorderBrush="#334155" BorderThickness="1">
+            <TextBlock Text="{Binding EnvironmentSummary, FallbackValue='Detecting OS...'}" FontSize="12" Foreground="#CBD5E1" />
+          </Border>
+          <Border Background="#0F172A" CornerRadius="6" Padding="10,6" BorderBrush="#334155" BorderThickness="1">
+            <TextBlock Text="{Binding Docker.Summary, FallbackValue='Docker Probe...'}" FontSize="12" Foreground="#38BDF8" />
+          </Border>
+          <Button Content="↻ Recheck" Command="{Binding RefreshEnvironmentCommand}" Background="#334155" Foreground="White" CornerRadius="6" />
+        </StackPanel>
+      </Grid>
+    </Border>
+
+    <!-- Main Body: Navigation Sidebar + Step Content -->
+    <Grid Grid.Row="1" ColumnDefinitions="240,*">
+      <!-- Sidebar Steps -->
+      <Border Grid.Column="0" Background="#1E293B" BorderBrush="#334155" BorderThickness="0,0,1,0" Padding="12,16">
+        <StackPanel Spacing="6">
+          <TextBlock Text="WIZARD STEPS" FontSize="11" FontWeight="SemiBold" Foreground="#64748B" Margin="8,0,0,8" />
+
+          <Button Content="1. Welcome &amp; Prerequisites" Command="{Binding GoToStepCommand}" CommandParameter="0"
+                  HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="12,10" CornerRadius="6" />
+          <Button Content="2. Project Details" Command="{Binding GoToStepCommand}" CommandParameter="1"
+                  HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="12,10" CornerRadius="6" />
+          <Button Content="3. Database Provider" Command="{Binding GoToStepCommand}" CommandParameter="2"
+                  HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="12,10" CornerRadius="6" />
+          <Button Content="4. Entity Schema Designer" Command="{Binding GoToStepCommand}" CommandParameter="3"
+                  HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="12,10" CornerRadius="6" />
+          <Button Content="5. Backend (.NET 10 CQRS)" Command="{Binding GoToStepCommand}" CommandParameter="4"
+                  HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="12,10" CornerRadius="6" />
+          <Button Content="6. Frontend (Next.js)" Command="{Binding GoToStepCommand}" CommandParameter="5"
+                  HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="12,10" CornerRadius="6" />
+          <Button Content="7. Review &amp; Generate" Command="{Binding GoToStepCommand}" CommandParameter="6"
+                  HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="12,10" CornerRadius="6" />
+          <Button Content="8. Docker Orchestration" Command="{Binding GoToStepCommand}" CommandParameter="7"
+                  HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="12,10" CornerRadius="6" />
+
+          <Separator Background="#334155" Margin="0,12" />
+
+          <TextBlock Text="SUMMARY" FontSize="11" FontWeight="SemiBold" Foreground="#64748B" Margin="8,0,0,4" />
+          <Border Background="#0F172A" CornerRadius="6" Padding="10" BorderBrush="#334155" BorderThickness="1">
+            <StackPanel Spacing="4">
+              <TextBlock Text="{Binding ProjectName, StringFormat='App: {0}'}" FontSize="12" FontWeight="SemiBold" Foreground="#F8FAFC" />
+              <TextBlock Text="{Binding SelectedDatabaseEngine, StringFormat='DB: {0}'}" FontSize="11" Foreground="#94A3B8" />
+              <TextBlock Text="{Binding Entities.Count, StringFormat='Entities: {0}'}" FontSize="11" Foreground="#94A3B8" />
+              <TextBlock Text="{Binding Configuration.Backend, StringFormat='API: {0}'}" FontSize="11" Foreground="#94A3B8" />
+              <TextBlock Text="{Binding Configuration.Frontend, StringFormat='Web: {0}'}" FontSize="11" Foreground="#94A3B8" />
+            </StackPanel>
+          </Border>
+        </StackPanel>
+      </Border>
+
+      <!-- Step Content Area -->
+      <ScrollViewer Grid.Column="1" Padding="32,24">
+        <StackPanel Spacing="20" MaxWidth="860" HorizontalAlignment="Left">
+
+          <!-- STEP 0: Welcome & Prerequisites -->
+          <StackPanel IsVisible="{Binding IsStep0}" Spacing="16">
+            <TextBlock Text="Welcome to DevStack Studio" FontSize="24" FontWeight="Bold" Foreground="#F8FAFC" />
+            <TextBlock Text="DevStack Studio builds a production-grade, editable, multi-service Docker development stack tailored to your domain." FontSize="14" Foreground="#94A3B8" TextWrapping="Wrap" />
+
+            <Border Background="#1E293B" CornerRadius="8" Padding="18" BorderBrush="#334155" BorderThickness="1">
+              <StackPanel Spacing="12">
+                <TextBlock Text="System &amp; Host Environment" FontSize="16" FontWeight="SemiBold" Foreground="#38BDF8" />
+                <Grid ColumnDefinitions="220,*" RowDefinitions="Auto,Auto,Auto,Auto" Margin="0,4,0,0">
+                  <TextBlock Grid.Row="0" Grid.Column="0" Text="Operating System:" Foreground="#94A3B8" VerticalAlignment="Center" Margin="0,4,12,4" />
+                  <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Environment.OsDescription}" Foreground="#F8FAFC" FontWeight="Medium" VerticalAlignment="Center" TextWrapping="Wrap" Margin="0,4,0,4" />
+
+                  <TextBlock Grid.Row="1" Grid.Column="0" Text="Architecture (OS / Process):" Foreground="#94A3B8" VerticalAlignment="Center" TextWrapping="Wrap" Margin="0,4,12,4" />
+                  <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Environment.RuntimeIdentifier}" Foreground="#F8FAFC" VerticalAlignment="Center" TextWrapping="Wrap" Margin="0,4,0,4" />
+
+                  <TextBlock Grid.Row="2" Grid.Column="0" Text=".NET SDK Version:" Foreground="#94A3B8" VerticalAlignment="Center" Margin="0,4,12,4" />
+                  <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding DotNetSummary}" Foreground="#F8FAFC" VerticalAlignment="Center" TextWrapping="Wrap" Margin="0,4,0,4" />
+
+                  <TextBlock Grid.Row="3" Grid.Column="0" Text="Docker Status:" Foreground="#94A3B8" VerticalAlignment="Center" Margin="0,4,12,4" />
+                  <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding Docker.Summary}" Foreground="#34D399" FontWeight="SemiBold" VerticalAlignment="Center" TextWrapping="Wrap" Margin="0,4,0,4" />
+                </Grid>
+              </StackPanel>
+            </Border>
+
+            <Border Background="#1E293B" CornerRadius="8" Padding="18" BorderBrush="#334155" BorderThickness="1">
+              <StackPanel Spacing="8">
+                <TextBlock Text="Docker Requirements &amp; Guidance" FontSize="16" FontWeight="SemiBold" Foreground="#F8FAFC" />
+                <TextBlock Text="• Windows / Mac: Docker Desktop is recommended. Verify organization licensing." Foreground="#94A3B8" />
+                <TextBlock Text="• Linux: Docker Engine with user in the `docker` group." Foreground="#94A3B8" />
+                <TextBlock Text="• Compose v2 (`docker compose`) is required for multi-container orchestration." Foreground="#94A3B8" />
+              </StackPanel>
+            </Border>
+          </StackPanel>
+
+          <!-- STEP 1: Project Details -->
+          <StackPanel IsVisible="{Binding IsStep1}" Spacing="16">
+            <TextBlock Text="Project Configuration" FontSize="22" FontWeight="Bold" Foreground="#F8FAFC" />
+            <TextBlock Text="Configure project identification and filesystem output destination." FontSize="14" Foreground="#94A3B8" />
+
+            <StackPanel Spacing="8">
+              <TextBlock Text="Project Name (safe identifier, e.g. CatalogDemo):" Foreground="#CBD5E1" />
+              <TextBox Text="{Binding ProjectName}" Background="#1E293B" Foreground="White" BorderBrush="#475569" CornerRadius="6" Padding="10,8" />
+            </StackPanel>
+
+            <StackPanel Spacing="8">
+              <TextBlock Text="Output Directory (where the project folder will be created):" Foreground="#CBD5E1" />
+              <TextBox Text="{Binding Configuration.OutputDirectory}" PlaceholderText="e.g. C:\Projects\CatalogDemo" Background="#1E293B" Foreground="White" BorderBrush="#475569" CornerRadius="6" Padding="10,8" />
+            </StackPanel>
+
+            <StackPanel Spacing="8">
+              <TextBlock Text="Docker Compose Project Name:" Foreground="#CBD5E1" />
+              <TextBox Text="{Binding Configuration.Docker.ComposeProjectName}" Background="#1E293B" Foreground="White" BorderBrush="#475569" CornerRadius="6" Padding="10,8" />
+            </StackPanel>
+          </StackPanel>
+
+          <!-- STEP 2: Database Provider -->
+          <StackPanel IsVisible="{Binding IsStep2}" Spacing="16">
+            <TextBlock Text="Database Engine &amp; Configuration" FontSize="22" FontWeight="Bold" Foreground="#F8FAFC" />
+            <TextBlock Text="Select a production database engine. Containers are version-pinned and volume-backed." FontSize="14" Foreground="#94A3B8" />
+
+            <StackPanel Spacing="8">
+              <TextBlock Text="Database Engine:" Foreground="#CBD5E1" />
+              <ComboBox ItemsSource="{Binding DatabaseProviders}" SelectedItem="{Binding SelectedDatabaseProvider}"
+                        Background="#1E293B" Foreground="White" HorizontalAlignment="Stretch">
+                <ComboBox.ItemTemplate>
+                  <DataTemplate>
+                    <TextBlock Text="{Binding Metadata.DisplayName}" />
+                  </DataTemplate>
+                </ComboBox.ItemTemplate>
+              </ComboBox>
+            </StackPanel>
+
+            <Border Background="#1E293B" CornerRadius="8" Padding="16" BorderBrush="#334155" BorderThickness="1"
+                    Width="680" HorizontalAlignment="Left">
+              <StackPanel Spacing="10">
+                <TextBlock Text="Container &amp; Port Settings" FontSize="15" FontWeight="SemiBold" Foreground="#38BDF8" />
+                <Grid ColumnDefinitions="140,*" RowDefinitions="Auto,Auto,Auto" Margin="0,4,0,0">
+                  <TextBlock Grid.Row="0" Grid.Column="0" Text="Database Name:" Foreground="#94A3B8" />
+                  <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Configuration.Database.DatabaseName}" Background="#0F172A" Foreground="White" Margin="0,2,0,4" />
+
+                  <TextBlock Grid.Row="1" Grid.Column="0" Text="Username:" Foreground="#94A3B8" />
+                  <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Configuration.Database.Username}" Background="#0F172A" Foreground="White" Margin="0,2,0,4" />
+
+                  <TextBlock Grid.Row="2" Grid.Column="0" Text="Host Port:" Foreground="#94A3B8" />
+                  <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding HostPort}" Background="#0F172A" Foreground="White" Margin="0,2,0,4" />
+                </Grid>
+                <TextBlock Text="{Binding PortConflictNotice}" Foreground="#38BDF8" FontSize="11" TextWrapping="Wrap"
+                           IsVisible="{Binding PortConflictNotice, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+                <CheckBox IsChecked="{Binding AcceptProviderLicense}"
+                          Content="I accept the terms and license of the selected database container image."
+                          Foreground="#CBD5E1" Margin="0,4,0,0"
+                          IsVisible="{Binding RequiresLicenseAcceptance}" />
+                <TextBlock Text="{Binding ProviderLimitationWarning}" Foreground="#FBBF24" FontSize="12" TextWrapping="Wrap" />
+              </StackPanel>
+            </Border>
+          </StackPanel>
+
+          <!-- STEP 3: Entity Schema Designer -->
+          <StackPanel IsVisible="{Binding IsStep3}" Spacing="16" MaxWidth="920" HorizontalAlignment="Stretch">
+            <TextBlock Text="Visual Entity &amp; Schema Designer" FontSize="22" FontWeight="Bold" Foreground="#F8FAFC" />
+            <TextBlock Text="Define your entities and columns. Types are remapped automatically per database engine." FontSize="14" Foreground="#94A3B8" />
+
+            <!-- Entity Chips Bar -->
+            <Border Background="#1E293B" CornerRadius="8" Padding="14" BorderBrush="#334155" BorderThickness="1">
+              <StackPanel Spacing="12">
+                <Grid ColumnDefinitions="*,Auto">
+                  <TextBlock Grid.Column="0" Text="Entities" FontSize="15" FontWeight="SemiBold" Foreground="#38BDF8" VerticalAlignment="Center" />
+                  <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8">
+                    <TextBox Text="{Binding NewEntityName}" PlaceholderText="Entity Name" Width="160" Background="#0F172A" Foreground="White" />
+                    <Button Content="+ Add Entity" Command="{Binding AddEntityCommand}" Background="#2563EB" Foreground="White" CornerRadius="6" />
+                  </StackPanel>
+                </Grid>
+
+                <!-- Entity Chips ItemsControl -->
+                <ItemsControl ItemsSource="{Binding Entities}">
+                  <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                      <WrapPanel Orientation="Horizontal" />
+                    </ItemsPanelTemplate>
+                  </ItemsControl.ItemsPanel>
+                  <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                      <Border Background="#334155" CornerRadius="16" Margin="4" Padding="12,6">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                          <Button Content="{Binding Name}" Command="{Binding #RootWindow.DataContext.SelectEntityCommand}"
+                                  CommandParameter="{Binding}" Background="Transparent" Foreground="White" Padding="0" BorderThickness="0" />
+                          <Button Content="✕" Command="{Binding #RootWindow.DataContext.RemoveEntityCommand}"
+                                  CommandParameter="{Binding}" Background="Transparent" Foreground="#F87171" Padding="2,0" BorderThickness="0" />
+                        </StackPanel>
+                      </Border>
+                    </DataTemplate>
+                  </ItemsControl.ItemTemplate>
+                </ItemsControl>
+              </StackPanel>
+            </Border>
+
+            <!-- Column Grid for Selected Entity -->
+            <Border Background="#1E293B" CornerRadius="8" Padding="16" BorderBrush="#334155" BorderThickness="1"
+                    IsVisible="{Binding SelectedEntity, Converter={x:Static ObjectConverters.IsNotNull}}">
+              <StackPanel Spacing="14">
+                <TextBlock Text="{Binding SelectedEntity.Name, StringFormat='Columns for: {0}'}" FontSize="15" FontWeight="SemiBold" Foreground="#38BDF8" />
+
+                <!-- Add Column Form with dedicated inputs and spacing -->
+                <Border Background="#0F172A" CornerRadius="8" Padding="12" BorderBrush="#334155" BorderThickness="1">
+                  <Grid ColumnDefinitions="170,120,70,130,Auto,Auto,Auto" VerticalAlignment="Center">
+                    <TextBox Grid.Column="0" Text="{Binding NewColumnName}" PlaceholderText="Column Name"
+                             Background="#1E293B" Foreground="White" Margin="0,0,10,0" VerticalAlignment="Center" />
+                    <ComboBox Grid.Column="1" ItemsSource="{Binding DatabaseTypes}" SelectedValue="{Binding NewColumnType}"
+                              SelectedValueBinding="{Binding LogicalId}" DisplayMemberBinding="{Binding DisplayName}"
+                              Background="#1E293B" Foreground="White" Margin="0,0,10,0" Width="120" VerticalAlignment="Center" />
+                    <TextBox Grid.Column="2" Text="{Binding NewColumnLength}" PlaceholderText="Length" ToolTip.Tip="Length (e.g. 256 for strings)"
+                             IsVisible="{Binding IsCurrentColumnLengthVisible}"
+                             Background="#1E293B" Foreground="White" Margin="0,0,10,0" Width="70" VerticalAlignment="Center" />
+                    <ComboBox Grid.Column="3" ItemsSource="{Binding AvailableForeignKeyTargets}" SelectedItem="{Binding NewColumnForeignKeyTarget}"
+                              Background="#1E293B" Foreground="White" Margin="0,0,10,0" Width="130" ToolTip.Tip="Foreign Key: References another entity" VerticalAlignment="Center">
+                      <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                          <TextBlock Text="{Binding Name, FallbackValue='(No FK)'}" />
+                        </DataTemplate>
+                      </ComboBox.ItemTemplate>
+                    </ComboBox>
+                    <CheckBox Grid.Column="4" IsChecked="{Binding NewColumnNullable}" Content="Nullable" Foreground="#CBD5E1" Margin="0,0,12,0" VerticalAlignment="Center" />
+                    <CheckBox Grid.Column="5" IsChecked="{Binding NewColumnPrimaryKey}" Content="PK" Foreground="#CBD5E1" Margin="0,0,12,0" VerticalAlignment="Center" />
+                    <Button Grid.Column="6" Content="+ Add Column" Command="{Binding AddColumnCommand}" Background="#10B981" Foreground="White" CornerRadius="6" Padding="14,7" FontWeight="SemiBold" VerticalAlignment="Center" />
+                  </Grid>
+                </Border>
+
+                <!-- Column ItemsControl Grid -->
+                <Border BorderBrush="#334155" BorderThickness="1" CornerRadius="6" Background="#0F172A">
+                  <StackPanel>
+                    <!-- Table Column Header -->
+                    <Border Background="#1E293B" Padding="14,10" BorderBrush="#334155" BorderThickness="0,0,0,1">
+                      <Grid ColumnDefinitions="160,110,80,95,90,90,*,Auto">
+                        <TextBlock Grid.Column="0" Text="COLUMN" FontSize="11" FontWeight="Bold" Foreground="#64748B" />
+                        <TextBlock Grid.Column="1" Text="TYPE" FontSize="11" FontWeight="Bold" Foreground="#64748B" />
+                        <TextBlock Grid.Column="2" Text="LENGTH" FontSize="11" FontWeight="Bold" Foreground="#64748B" />
+                        <TextBlock Grid.Column="3" Text="PRIMARY KEY" FontSize="11" FontWeight="Bold" Foreground="#64748B" />
+                        <TextBlock Grid.Column="4" Text="NULLABLE" FontSize="11" FontWeight="Bold" Foreground="#64748B" />
+                        <TextBlock Grid.Column="5" Text="FOREIGN KEY" FontSize="11" FontWeight="Bold" Foreground="#64748B" />
+                        <TextBlock Grid.Column="6" Text="" />
+                        <TextBlock Grid.Column="7" Text="ACTION" FontSize="11" FontWeight="Bold" Foreground="#64748B" HorizontalAlignment="Right" />
+                      </Grid>
+                    </Border>
+
+                    <ItemsControl ItemsSource="{Binding SelectedEntityColumns}">
+                      <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                          <Border BorderBrush="#1E293B" BorderThickness="0,0,0,1" Padding="14,10" Background="Transparent">
+                            <Grid ColumnDefinitions="160,110,80,95,90,90,*,Auto">
+                              <TextBlock Grid.Column="0" Text="{Binding Name}" FontWeight="SemiBold" Foreground="#F8FAFC" VerticalAlignment="Center" />
+                              <Border Grid.Column="1" Background="#1E293B" CornerRadius="4" Padding="6,2" HorizontalAlignment="Left" VerticalAlignment="Center">
+                                <TextBlock Text="{Binding LogicalType}" FontSize="12" Foreground="#38BDF8" />
+                              </Border>
+                              <TextBlock Grid.Column="2" Text="{Binding Length, StringFormat='Len: {0}'}" Foreground="#94A3B8" VerticalAlignment="Center"
+                                         IsVisible="{Binding Length, Converter={x:Static ObjectConverters.IsNotNull}}" />
+                              <TextBlock Grid.Column="2" Text="—" Foreground="#475569" VerticalAlignment="Center"
+                                         IsVisible="{Binding Length, Converter={x:Static ObjectConverters.IsNull}}" />
+
+                              <Border Grid.Column="3" Background="#0C4A6E" CornerRadius="4" Padding="6,2" HorizontalAlignment="Left" VerticalAlignment="Center"
+                                      IsVisible="{Binding IsPrimaryKey}">
+                                <TextBlock Text="PK" FontSize="11" FontWeight="Bold" Foreground="#38BDF8" />
+                              </Border>
+                              <TextBlock Grid.Column="3" Text="No" Foreground="#475569" FontSize="12" VerticalAlignment="Center"
+                                         IsVisible="{Binding !IsPrimaryKey}" />
+
+                              <TextBlock Grid.Column="4" Text="Yes" Foreground="#94A3B8" FontSize="12" VerticalAlignment="Center"
+                                         IsVisible="{Binding IsNullable}" />
+                              <TextBlock Grid.Column="4" Text="No" Foreground="#475569" FontSize="12" VerticalAlignment="Center"
+                                         IsVisible="{Binding !IsNullable}" />
+
+                              <Border Grid.Column="5" Background="#451A03" CornerRadius="4" Padding="6,2" HorizontalAlignment="Left" VerticalAlignment="Center"
+                                      IsVisible="{Binding ForeignKeyTargetEntityId, Converter={x:Static ObjectConverters.IsNotNull}}">
+                                <TextBlock Text="FK" FontSize="11" FontWeight="Bold" Foreground="#F59E0B" />
+                              </Border>
+                              <TextBlock Grid.Column="5" Text="—" Foreground="#475569" VerticalAlignment="Center"
+                                         IsVisible="{Binding ForeignKeyTargetEntityId, Converter={x:Static ObjectConverters.IsNull}}" />
+
+                              <TextBlock Grid.Column="6" Text="{Binding Description}" Foreground="#64748B" FontSize="12" VerticalAlignment="Center" />
+
+                              <Button Grid.Column="7" Content="Delete" Command="{Binding #RootWindow.DataContext.RemoveColumnCommand}"
+                                      CommandParameter="{Binding}" Background="#EF4444" Foreground="White" CornerRadius="4" Padding="8,3" FontSize="12"
+                                      Cursor="Hand" />
+                            </Grid>
+                          </Border>
+                        </DataTemplate>
+                      </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                  </StackPanel>
+                </Border>
+              </StackPanel>
+            </Border>
+          </StackPanel>
+
+          <!-- STEP 4: Backend Selection -->
+          <StackPanel IsVisible="{Binding IsStep4}" Spacing="16">
+            <TextBlock Text="Backend Architecture: ASP.NET Core CQRS (.NET 10)" FontSize="22" FontWeight="Bold" Foreground="#F8FAFC" />
+            <TextBlock Text="Structured according to Clean Architecture and CQRS principles with Entity Framework Core." FontSize="14" Foreground="#94A3B8" />
+
+            <Border Background="#1E293B" CornerRadius="8" Padding="18" BorderBrush="#334155" BorderThickness="1">
+              <StackPanel Spacing="10">
+                <TextBlock Text="Generated Backend Features" FontSize="16" FontWeight="SemiBold" Foreground="#38BDF8" />
+                <TextBlock Text="✔ Target: .NET 10 LTS with C# 13" Foreground="#CBD5E1" />
+                <TextBlock Text="✔ Clean Architecture: .Api, .Application, .Domain, .Infrastructure, .Tests" Foreground="#CBD5E1" />
+                <TextBlock Text="✔ CQRS: Separate Commands (Create, Update, Delete) and Queries (GetById, List with search &amp; paging)" Foreground="#CBD5E1" />
+                <TextBlock Text="✔ Validation: FluentValidation command and query rules" Foreground="#CBD5E1" />
+                <TextBlock Text="✔ Health check: /health endpoint and readiness probe" Foreground="#CBD5E1" />
+                <TextBlock Text="✔ Standard API envelope: ApiResponse&lt;T&gt; with centralized exception handling" Foreground="#CBD5E1" />
+              </StackPanel>
+            </Border>
+          </StackPanel>
+
+          <!-- STEP 5: Frontend Selection -->
+          <StackPanel IsVisible="{Binding IsStep5}" Spacing="16">
+            <TextBlock Text="Frontend Architecture: Next.js (TypeScript)" FontSize="22" FontWeight="Bold" Foreground="#F8FAFC" />
+            <TextBlock Text="App Router, typed client, responsive modern layout, and CRUD flows for all entities." FontSize="14" Foreground="#94A3B8" />
+
+            <Border Background="#1E293B" CornerRadius="8" Padding="18" BorderBrush="#334155" BorderThickness="1">
+              <StackPanel Spacing="10">
+                <TextBlock Text="Generated Frontend Features" FontSize="16" FontWeight="SemiBold" Foreground="#38BDF8" />
+                <TextBlock Text="✔ Target: Next.js 15+ App Router &amp; TypeScript" Foreground="#CBD5E1" />
+                <TextBlock Text="✔ Dynamic Pages: List view, create dialog, detail/update page per entity" Foreground="#CBD5E1" />
+                <TextBlock Text="✔ Client: Typed API client with base URL environment configuration" Foreground="#CBD5E1" />
+                <TextBlock Text="✔ Production &amp; Development: Multi-stage Dockerfile with standalone output" Foreground="#CBD5E1" />
+              </StackPanel>
+            </Border>
+          </StackPanel>
+
+          <!-- STEP 6: Review & Generate -->
+          <StackPanel IsVisible="{Binding IsStep6}" Spacing="16">
+            <TextBlock Text="Review Architecture &amp; Generate Project" FontSize="22" FontWeight="Bold" Foreground="#F8FAFC" />
+            <TextBlock Text="Confirm generation options and generate the full solution to disk." FontSize="14" Foreground="#94A3B8" />
+
+            <Border Background="#1E293B" CornerRadius="8" Padding="14,12" BorderBrush="#334155" BorderThickness="1">
+              <CheckBox IsChecked="{Binding ForceOverwriteExistingFiles}"
+                        Content="Force overwrite existing files in destination directory"
+                        Foreground="#E2E8F0" FontSize="13" />
+            </Border>
+
+            <Button Content="⚡ Generate Complete Project" Command="{Binding GenerateProjectCommand}"
+                    Background="#2563EB" Foreground="White" FontSize="16" FontWeight="Bold" Padding="20,12" CornerRadius="8" />
+
+            <Border Background="#1E293B" CornerRadius="8" Padding="16" BorderBrush="#334155" BorderThickness="1"
+                    IsVisible="{Binding GenerationOutput, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+              <TextBox Text="{Binding GenerationOutput}" IsReadOnly="True" TextWrapping="Wrap"
+                       Background="#0F172A" Foreground="#38BDF8" FontFamily="Consolas,Cascadia Code,monospace" />
+            </Border>
+          </StackPanel>
+
+          <!-- STEP 7: Docker Orchestration -->
+          <StackPanel IsVisible="{Binding IsStep7}" Spacing="16">
+            <TextBlock Text="Docker Environment Manager" FontSize="22" FontWeight="Bold" Foreground="#F8FAFC" />
+            <TextBlock Text="Manage containers, view runtime logs, and inspect services." FontSize="14" Foreground="#94A3B8" />
+
+            <StackPanel Orientation="Horizontal" Spacing="12">
+              <Button Content="▶ Start Stack (up --build -d)" Command="{Binding StartServicesCommand}"
+                      Background="#10B981" Foreground="White" FontWeight="Bold" Padding="16,10" CornerRadius="6" />
+              <Button Content="⏹ Stop Stack (down)" Command="{Binding StopServicesCommand}"
+                      Background="#EF4444" Foreground="White" FontWeight="Bold" Padding="16,10" CornerRadius="6" />
+            </StackPanel>
+
+            <Border Background="#1E293B" CornerRadius="8" Padding="16" BorderBrush="#334155" BorderThickness="1">
+              <StackPanel Spacing="8">
+                <TextBlock Text="Compose Logs &amp; Execution Output:" Foreground="#94A3B8" FontWeight="SemiBold" />
+                <TextBox Text="{Binding OrchestrationLogs}" IsReadOnly="True" Height="240" TextWrapping="Wrap"
+                         Background="#0F172A" Foreground="#E2E8F0" FontFamily="Consolas,Cascadia Code,monospace" />
+              </StackPanel>
+            </Border>
+          </StackPanel>
+
+        </StackPanel>
+      </ScrollViewer>
+    </Grid>
+
+    <!-- Footer Controls -->
+    <Border Grid.Row="2" Background="#1E293B" Padding="20,12" BorderBrush="#334155" BorderThickness="0,1,0,0">
+      <Grid ColumnDefinitions="*,Auto,Auto">
+        <TextBlock Grid.Column="0" Text="{Binding StatusMessage}" Foreground="#94A3B8" VerticalAlignment="Center" FontSize="12" />
+
+        <Button Grid.Column="1" Content="◀ Back" Command="{Binding PreviousStepCommand}"
+                Background="#334155" Foreground="White" Margin="0,0,10,0" Padding="16,8" CornerRadius="6" />
+
+        <Button Grid.Column="2" Content="Next Step ▶" Command="{Binding NextStepCommand}"
+                Background="#2563EB" Foreground="White" FontWeight="SemiBold" Padding="16,8" CornerRadius="6" />
+      </Grid>
+    </Border>
+  </Grid>
+</Window>

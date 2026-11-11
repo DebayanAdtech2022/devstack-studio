@@ -1,0 +1,13 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/DevStackStudio.App/DevStackStudio.App.csproj" />
+    <Project Path="src/DevStackStudio.Core/DevStackStudio.Core.csproj" />
+    <Project Path="src/DevStackStudio.Generators/DevStackStudio.Generators.csproj" />
+    <Project Path="src/DevStackStudio.Infrastructure/DevStackStudio.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/DevStackStudio.Core.Tests/DevStackStudio.Core.Tests.csproj" />
+    <Project Path="tests/DevStackStudio.Generators.Tests/DevStackStudio.Generators.Tests.csproj" />
+    <Project Path="tests/DevStackStudio.IntegrationTests/DevStackStudio.IntegrationTests.csproj" />
+  </Folder>
+</Solution>

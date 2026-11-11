@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <RootNamespace>DevStackStudio.Generators</RootNamespace>
+    <Description>Deterministic project, schema, Docker Compose, backend, and frontend generation.</Description>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DevStackStudio.Core\DevStackStudio.Core.csproj" />
+  </ItemGroup>
+</Project>

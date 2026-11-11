@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DevStack Studio — Download Control Plane</title>
+  <meta name="description" content="Cross-platform desktop application generator and Docker environment manager. Download self-contained installers for Windows, Linux, and macOS." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="header">
+    <div class="container header-container">
+      <div class="logo">
+        <span class="logo-icon">⚡</span>
+        <div class="logo-text">
+          <span class="logo-title">DevStack Studio</span>
+          <span class="logo-subtitle">Cross-Platform Control Plane</span>
+        </div>
+      </div>
+      <div class="version-tag">v0.1.0 (LTS Target)</div>
+    </div>
+  </header>
+
+  <main class="main">
+    <section class="hero container">
+      <h1 class="hero-title">Eliminate Repetitive Setup.<br/><span class="gradient-text">Design Schema, Generate Stacks, Run Docker.</span></h1>
+      <p class="hero-desc">
+        A native, self-contained desktop application that detects your operating system, validates Docker, visualizes entity schemas, and generates editable .NET 10 CQRS + Next.js full-stack Docker environments.
+      </p>
+
+      <!-- Smart Recommendation Box -->
+      <div class="recommendation-card" id="recommendation-card">
+        <div class="card-badge">RECOMMENDED FOR YOUR SYSTEM</div>
+        <div class="card-content">
+          <div class="platform-info">
+            <span class="platform-icon" id="rec-icon">💻</span>
+            <div>
+              <h2 class="platform-name" id="rec-title">Detecting your platform...</h2>
+              <p class="platform-meta" id="rec-meta">Checking browser navigator architecture</p>
+            </div>
+          </div>
+          <a href="#" class="btn-primary" id="rec-btn">Download Installer (.zip)</a>
+        </div>
+        <div class="checksum-notice" id="rec-checksum">SHA-256 Checksum: Pending...</div>
+      </div>
+    </section>
+
+    <!-- All Available Downloads -->
+    <section class="downloads-section container">
+      <h2 class="section-title">All Platform Packages</h2>
+      <p class="section-desc">Self-contained native executables. No pre-installed .NET runtime required.</p>
+
+      <div class="downloads-grid">
+        <!-- Windows -->
+        <div class="download-card" data-platform="windows">
+          <div class="card-header">
+            <span class="card-icon">🪟</span>
+            <h3>Windows</h3>
+          </div>
+          <p class="card-meta">Windows 10 / 11 (64-bit)</p>
+          <div class="btn-group">
+            <a href="https://github.com/DebayanAdtech2022/devstack-studio/releases/download/v0.1.0/devstack-studio-0.1.0-win-x64.zip" class="btn-download">Download x64 (.zip)</a>
+            <a href="https://github.com/DebayanAdtech2022/devstack-studio/releases/download/v0.1.0/devstack-studio-0.1.0-win-arm64.zip" class="btn-download">Download ARM64 (.zip)</a>
+          </div>
+        </div>
+
+        <!-- Linux -->
+        <div class="download-card" data-platform="linux">
+          <div class="card-header">
+            <span class="card-icon">🐧</span>
+            <h3>Linux</h3>
+          </div>
+          <p class="card-meta">Ubuntu, Debian, Fedora, Arch (glibc 2.31+)</p>
+          <div class="btn-group">
+            <a href="https://github.com/DebayanAdtech2022/devstack-studio/releases/download/v0.1.0/devstack-studio-0.1.0-linux-x64.zip" class="btn-download">Download x64 (.tar.gz)</a>
+            <a href="https://github.com/DebayanAdtech2022/devstack-studio/releases/download/v0.1.0/devstack-studio-0.1.0-linux-arm64.zip" class="btn-download">Download ARM64 (.tar.gz)</a>
+          </div>
+        </div>
+
+        <!-- macOS -->
+        <div class="download-card" data-platform="macos">
+          <div class="card-header">
+            <span class="card-icon">🍎</span>
+            <h3>macOS</h3>
+          </div>
+          <p class="card-meta">macOS 12 Monterey or newer</p>
+          <div class="btn-group">
+            <a href="https://github.com/DebayanAdtech2022/devstack-studio/releases/download/v0.1.0/devstack-studio-0.1.0-osx-arm64.zip" class="btn-download">Apple Silicon (M1/M2/M3/M4)</a>
+            <a href="https://github.com/DebayanAdtech2022/devstack-studio/releases/download/v0.1.0/devstack-studio-0.1.0-osx-x64.zip" class="btn-download">Intel x64 (.zip)</a>
+          </div>
+        </div>
+
+        <!-- Universal Offline Bundle -->
+        <div class="download-card highlight-card">
+          <div class="card-header">
+            <span class="card-icon">📦</span>
+            <h3>Universal Offline Bundle</h3>
+          </div>
+          <p class="card-meta">Includes all platform binaries, documentation, and schema generator tools in a single offline package.</p>
+          <div class="btn-group">
+            <a href="https://github.com/DebayanAdtech2022/devstack-studio/releases/download/v0.1.0/devstack-studio-0.1.0-universal-offline.zip" class="btn-primary full-width">Download Universal Offline ZIP</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Installation & Verification Guide -->
+    <section class="instructions-section container">
+      <h2 class="section-title">Verification &amp; Quickstart</h2>
+      <div class="terminal-box">
+        <div class="terminal-header">
+          <span class="dot red"></span>
+          <span class="dot yellow"></span>
+          <span class="dot green"></span>
+          <span class="terminal-title">Verify SHA-256 Checksum</span>
+        </div>
+        <pre class="terminal-body"><code># Windows PowerShell:
+Get-FileHash .\devstack-studio-0.1.0-win-x64.zip -Algorithm SHA256
+
+# Linux & macOS:
+sha256sum devstack-studio-0.1.0-linux-x64.zip
+shasum -a 256 devstack-studio-0.1.0-osx-arm64.zip</code></pre>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-content">
+      <p>DevStack Studio is free, open-source software built for developers.</p>
+      <p class="footer-note">Browser architecture detection may vary on Apple Silicon. Always choose your native chip if prompted.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
