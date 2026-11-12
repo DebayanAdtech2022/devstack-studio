@@ -14,9 +14,11 @@ public sealed class ProcessRunner(ILogger<ProcessRunner>? logger = null) : IProc
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(request.FileName);
 
+        var fileName = ResolveExecutablePath(request.FileName);
+
         var start = new ProcessStartInfo
         {
-            FileName = request.FileName,
+            FileName = fileName,
             WorkingDirectory = request.WorkingDirectory ?? System.Environment.CurrentDirectory,
             RedirectStandardOutput = true,
             RedirectStandardError = true,
@@ -111,5 +113,38 @@ public sealed class ProcessRunner(ILogger<ProcessRunner>? logger = null) : IProc
         catch (InvalidOperationException)
         {
         }
+    }
+
+    private static string ResolveExecutablePath(string fileName)
+    {
+        if (Path.IsPathRooted(fileName) || fileName.Contains(Path.DirectorySeparatorChar) || fileName.Contains(Path.AltDirectorySeparatorChar))
+        {
+            return fileName;
+        }
+
+        // On macOS / Linux, standard paths might not be in PATH if launched outside a full login shell
+        if (!OperatingSystem.IsWindows() && (fileName == "docker" || fileName == "docker-compose"))
+        {
+            string[] searchPaths =
+            [
+                "/usr/local/bin",
+                "/opt/homebrew/bin",
+                "/usr/bin",
+                "/bin",
+                Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.UserProfile), ".docker", "bin"),
+                "/Applications/Docker.app/Contents/Resources/bin"
+            ];
+
+            foreach (var dir in searchPaths)
+            {
+                var candidate = Path.Combine(dir, fileName);
+                if (File.Exists(candidate))
+                {
+                    return candidate;
+                }
+            }
+        }
+
+        return fileName;
     }
 }

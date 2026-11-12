@@ -119,19 +119,103 @@ if [ "$OS" = "Linux" ]; then
 fi
 
 # ==============================================================================
-# macOS: Check Docker & Homebrew auto-installation
+# macOS: Self-healing Docker check & automated zero-click/unattended installation
 # ==============================================================================
 if [ "$OS" = "Darwin" ]; then
+    # 1. Expand PATH with standard macOS Docker binary locations
+    export PATH="/usr/local/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin:$HOME/.docker/bin:/Applications/Docker.app/Contents/Resources/bin:$PATH"
+
+    # 2. Check if Docker Desktop app bundle is installed but symlinks/PATH are missing
+    if ! command -v docker >/dev/null 2>&1; then
+        if [ -x "/Applications/Docker.app/Contents/Resources/bin/docker" ]; then
+            echo "--> Found Docker.app in /Applications. Linking CLI to /usr/local/bin..."
+            if [ -w "/usr/local/bin" ]; then
+                ln -sf /Applications/Docker.app/Contents/Resources/bin/docker /usr/local/bin/docker 2>/dev/null || true
+                ln -sf /Applications/Docker.app/Contents/Resources/bin/docker-compose /usr/local/bin/docker-compose 2>/dev/null || true
+            else
+                sudo ln -sf /Applications/Docker.app/Contents/Resources/bin/docker /usr/local/bin/docker 2>/dev/null || true
+                sudo ln -sf /Applications/Docker.app/Contents/Resources/bin/docker-compose /usr/local/bin/docker-compose 2>/dev/null || true
+            fi
+        fi
+    fi
+
+    # 3. If Docker is still missing, perform automated self-healing installation
     if ! command -v docker >/dev/null 2>&1; then
         echo ""
-        echo "--> [Prerequisite Check] Docker is not detected in PATH."
+        echo "=================================================================="
+        echo "--> [Prerequisite Check] Docker is not installed on this Mac."
+        echo "--> Initiating automated zero-friction self-healing installation..."
+        echo "=================================================================="
+
+        INSTALLED=false
+
+        # Strategy A: Use Homebrew if available
         if command -v brew >/dev/null 2>&1; then
-            echo "--> Homebrew detected. Attempting automated installation of Docker Desktop..."
-            brew install --cask docker || {
-                echo "Warning: Automated Docker Desktop installation via brew encountered an issue."
-            }
+            echo "--> Attempting automated installation via Homebrew cask..."
+            if brew install --cask docker; then
+                INSTALLED=true
+            fi
+        fi
+
+        # Strategy B: Direct official Apple Silicon / Intel unattended installer
+        if [ "$INSTALLED" = false ]; then
+            DMG_URL=""
+            if [ "$ARCH" = "arm64" ]; then
+                echo "--> Downloading Docker Desktop for Apple Silicon (ARM64)..."
+                DMG_URL="https://desktop.docker.com/mac/main/arm64/Docker.dmg"
+            else
+                echo "--> Downloading Docker Desktop for Intel Mac (x86_64)..."
+                DMG_URL="https://desktop.docker.com/mac/main/amd64/Docker.dmg"
+            fi
+
+            TMP_DMG="/tmp/DockerDesktopInstaller.dmg"
+            rm -f "$TMP_DMG"
+
+            if curl -fSL --progress-bar -o "$TMP_DMG" "$DMG_URL"; then
+                echo "--> Mounting Docker installer disk image..."
+                hdiutil attach "$TMP_DMG" -nobrowse -quiet -mountpoint /Volumes/DockerInstaller || true
+
+                if [ -d "/Volumes/DockerInstaller/Docker.app" ]; then
+                    echo "--> Installing Docker Desktop to /Applications (may request Mac administrator password)..."
+                    sudo cp -R /Volumes/DockerInstaller/Docker.app /Applications/
+                    
+                    if [ -x "/Applications/Docker.app/Contents/MacOS/install" ]; then
+                        sudo /Applications/Docker.app/Contents/MacOS/install --accept-license --user="$USER" || true
+                    fi
+
+                    sudo ln -sf /Applications/Docker.app/Contents/Resources/bin/docker /usr/local/bin/docker 2>/dev/null || true
+                    sudo ln -sf /Applications/Docker.app/Contents/Resources/bin/docker-compose /usr/local/bin/docker-compose 2>/dev/null || true
+                    INSTALLED=true
+                fi
+
+                hdiutil detach /Volumes/DockerInstaller -quiet -force 2>/dev/null || true
+                rm -f "$TMP_DMG"
+            fi
+        fi
+
+        # Verify installation outcome
+        if command -v docker >/dev/null 2>&1 || [ -x "/usr/local/bin/docker" ]; then
+            echo "--> Docker CLI successfully installed!"
+            export PATH="/usr/local/bin:$PATH"
         else
-            echo "Notice: Docker Desktop for macOS can be installed from: https://docs.docker.com/desktop/setup/install/mac-install/"
+            echo "Warning: Automated Docker installation could not complete automatically."
+            echo "Notice: You can install Docker Desktop for Mac directly from: https://docs.docker.com/desktop/setup/install/mac-install/"
+        fi
+    fi
+
+    # 4. If Docker daemon / Docker.app is not actively running, launch it
+    if ! docker info >/dev/null 2>&1; then
+        if [ -d "/Applications/Docker.app" ]; then
+            echo "--> Starting Docker Desktop background engine..."
+            open -a /Applications/Docker.app --hide 2>/dev/null || true
+            echo "--> Waiting for Docker daemon to become responsive..."
+            for i in {1..30}; do
+                if docker info >/dev/null 2>&1; then
+                    echo "--> Docker engine is online and ready!"
+                    break
+                fi
+                sleep 2
+            done
         fi
     fi
 fi
