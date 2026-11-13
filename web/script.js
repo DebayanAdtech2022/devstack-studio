@@ -34,19 +34,49 @@
   } else if (/Mac/i.test(platform) || /Macintosh/i.test(userAgent)) {
     os = 'macOS';
     icon = '🍎';
-    // Mac detection - modern Macs are overwhelmingly Apple Silicon (arm64)
-    // Note: navigator.platform on Apple Silicon still reports 'MacIntel' in many browsers
-    if (/arm/i.test(navigator.userAgentData?.architecture || '') || (navigator.maxTouchPoints > 0 && !/iPhone|iPad/i.test(userAgent))) {
+    
+    // Accurate detection of Apple Silicon vs Intel on macOS:
+    // 1. Check User-Agent Client Hints if available
+    // 2. Query WebGL unmasked renderer (Intel/AMD vs Apple M1/M2/M3/M4 GPU)
+    function detectMacSilicon() {
+      if (/arm/i.test(navigator.userAgentData?.architecture || '')) {
+        return true;
+      }
+      try {
+        const canvas = document.createElement('canvas');
+        const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+        if (gl) {
+          const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+          if (debugInfo) {
+            const renderer = gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL) || '';
+            // Intel Iris / UHD / HD or AMD Radeon GPUs mean an Intel Mac
+            if (/Intel|Iris|HD Graphics|UHD Graphics|AMD|Radeon/i.test(renderer)) {
+              return false;
+            }
+            // Explicit Apple Silicon identifiers
+            if (/Apple M|Apple GPU/i.test(renderer)) {
+              return true;
+            }
+          }
+        }
+      } catch (e) {
+        // Fallback gracefully
+      }
+      return false;
+    }
+
+    const isSilicon = detectMacSilicon();
+
+    if (isSilicon) {
       arch = 'arm64';
       filename = 'devstack-studio-0.1.0-osx-arm64.zip';
       platformLabel = 'macOS (Apple Silicon M1-M4)';
       metaDesc = 'Native Apple Silicon ARM64 build';
     } else {
-      // Default to Apple Silicon recommended with notice for Intel
-      arch = 'arm64';
-      filename = 'devstack-studio-0.1.0-osx-arm64.zip';
-      platformLabel = 'macOS (Apple Silicon recommended)';
-      metaDesc = 'Choose Intel build below if running on an Intel Mac';
+      arch = 'x64';
+      filename = 'devstack-studio-0.1.0-osx-x64.zip';
+      platformLabel = 'macOS (Intel x86_64)';
+      metaDesc = 'Native Intel 64-bit Mac build';
     }
   } else if (/Linux/i.test(platform) || /Linux/i.test(userAgent)) {
     os = 'Linux';
