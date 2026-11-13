@@ -1,48 +1,48 @@
 {
     "Version":  "0.1.0",
-    "GeneratedAtUtc":  "2026-11-13T08:15:09.3563506Z",
+    "GeneratedAtUtc":  "2026-11-13T10:01:41.9922046Z",
     "Artifacts":  [
                       {
                           "Target":  "win-x64",
                           "Archive":  "devstack-studio-0.1.0-win-x64.zip",
-                          "Sha256":  "b15652cba1589724760ca8f25a42aec58f9f4d9ed1fb0c03f0c9bec2d229c6f5",
-                          "Size":  70889677
+                          "Sha256":  "3b347af0cccb74a2c7ac6266961f81239214b566e3c6a7314eab611c5d68a667",
+                          "Size":  70889684
                       },
                       {
                           "Target":  "win-arm64",
                           "Archive":  "devstack-studio-0.1.0-win-arm64.zip",
-                          "Sha256":  "6cd6df94fed6a07adfc241ea56ea5e1efb077e5715b7c0d96380e4874b22bc38",
-                          "Size":  68720225
+                          "Sha256":  "693c8ca26fba5e2fb7568f4720b8710fdba8d713dcc7a90b7cde4dca818fcbe9",
+                          "Size":  68720231
                       },
                       {
                           "Target":  "linux-x64",
                           "Archive":  "devstack-studio-0.1.0-linux-x64.zip",
-                          "Sha256":  "bd26bd355633d2a96f2f4a9669e5c2da26c4ecfdcbe6e4c4a132ba688f50dad4",
-                          "Size":  42425866
+                          "Sha256":  "bba41da9e8df9b02a44137bfd37b725bf84884a36c2c4835d7f323ad72d21f2c",
+                          "Size":  42425882
                       },
                       {
                           "Target":  "linux-arm64",
                           "Archive":  "devstack-studio-0.1.0-linux-arm64.zip",
-                          "Sha256":  "99e9be8f630027a50a84f21e194717afd6cf5c85a690dc5c4ee0315c81f9853d",
-                          "Size":  40360453
+                          "Sha256":  "2b7e06e06d7e0dc1703ff245474564b3d2b4ca871914493245660f76c24d1d5f",
+                          "Size":  40360450
                       },
                       {
                           "Target":  "osx-x64",
                           "Archive":  "devstack-studio-0.1.0-osx-x64.zip",
-                          "Sha256":  "fb0c95c42eb21ce964339bd4d1bc2a8b0c30778f97e3aa63013694eb687ac9f0",
-                          "Size":  45497866
+                          "Sha256":  "5e0a2a1d30b3ae1e103f9cf2bf31928915b4814d21b61a4d716c4224fed0ce13",
+                          "Size":  45497871
                       },
                       {
                           "Target":  "osx-arm64",
                           "Archive":  "devstack-studio-0.1.0-osx-arm64.zip",
-                          "Sha256":  "df20a3d415413f9b0db485769f2f2c7155e67b9393fd1bd959e8d707ce70f1f6",
-                          "Size":  43649784
+                          "Sha256":  "6e88b569aa3026cbe7a50a5e9cb0d88fa6376b84467d6d35ae921e6c4a4c229d",
+                          "Size":  43649783
                       },
                       {
                           "Target":  "universal-offline",
                           "Archive":  "devstack-studio-0.1.0-universal-offline.zip",
-                          "Sha256":  "c264f3be0f89176cf4078119dc8f41487e6aa525b9d109ba41158e1d3d73d8f4",
-                          "Size":  311567055
+                          "Sha256":  "519fbfade84530e217431bf56473e6476e4952e3defb46db7d98105676af88d7",
+                          "Size":  311567085
                       }
                   ]
 }
