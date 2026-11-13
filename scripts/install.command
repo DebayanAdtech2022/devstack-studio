@@ -6,6 +6,18 @@ set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
+# ==============================================================================
+# Automatic self-elevation: clear macOS Gatekeeper quarantine & ensure executable bits
+# ==============================================================================
+if [ "$(uname -s)" = "Darwin" ]; then
+    # Recursively strip quarantine attribute from bundle directory silently
+    if command -v xattr >/dev/null 2>&1; then
+        xattr -dr com.apple.quarantine "$SCRIPT_DIR" 2>/dev/null || true
+    fi
+    # Ensure all binaries and helper scripts in this bundle have execute permissions
+    find "$SCRIPT_DIR" -type f \( -name "DevStackStudio.App" -o -name "*.command" -o -name "*.sh" \) -exec chmod +x {} + 2>/dev/null || true
+fi
+
 echo "========================================"
 echo "DevStack Studio - Universal Launcher"
 echo "========================================"

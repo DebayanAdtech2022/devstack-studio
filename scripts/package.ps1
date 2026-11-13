@@ -30,6 +30,44 @@ New-Item -ItemType Directory -Force -Path $distDir | Out-Null
 
 $manifestEntries = @()
 
+# Function to patch Unix file permissions (0755 / -rwxr-xr-x) directly into ZIP Central Directory headers
+function Set-UnixExecutableAttributesInZip {
+    param([string]$ZipFilePath)
+
+    if (-not (Test-Path $ZipFilePath)) { return }
+
+    $bytes = [System.IO.File]::ReadAllBytes($ZipFilePath)
+    # Central Directory signature: PK\x01\x02 -> 0x50, 0x4b, 0x01, 0x02
+    for ($i = 0; $i -lt ($bytes.Length - 46); $i++) {
+        if ($bytes[$i] -eq 0x50 -and $bytes[$i+1] -eq 0x4b -and $bytes[$i+2] -eq 0x01 -and $bytes[$i+3] -eq 0x02) {
+            $fileNameLen = [System.BitConverter]::ToUInt16($bytes, $i + 28)
+            $extraLen = [System.BitConverter]::ToUInt16($bytes, $i + 30)
+            $commentLen = [System.BitConverter]::ToUInt16($bytes, $i + 32)
+
+            $fileName = [System.Text.Encoding]::UTF8.GetString($bytes, $i + 46, $fileNameLen)
+            
+            # Executable binaries and shell scripts
+            if ($fileName.EndsWith("DevStackStudio.App") -or 
+                $fileName.EndsWith(".dylib") -or 
+                $fileName.EndsWith(".command") -or 
+                $fileName.EndsWith(".sh")) {
+                
+                # Set Host OS byte to 3 (Unix)
+                $bytes[$i + 5] = 3
+                # Set External Attributes to (0100755 << 16) -> 0x81ed0000 in little endian: 0x00, 0x00, 0xed, 0x81
+                $bytes[$i + 38] = 0x00
+                $bytes[$i + 39] = 0x00
+                $bytes[$i + 40] = 0xed
+                $bytes[$i + 41] = 0x81
+            }
+
+            $i += 45 + $fileNameLen + $extraLen + $commentLen
+        }
+    }
+
+    [System.IO.File]::WriteAllBytes($ZipFilePath, $bytes)
+}
+
 foreach ($rid in $targets) {
     Write-Host "`n--> Publishing for target: $rid..." -ForegroundColor Yellow
     $targetPubDir = "$OutputDir/$rid"
@@ -50,6 +88,11 @@ foreach ($rid in $targets) {
     $zipPath = "$distDir/$zipName"
     Write-Host "    Archiving $rid to $zipName..." -ForegroundColor Gray
     Compress-Archive -Path "$targetPubDir/*" -DestinationPath $zipPath -Force
+
+    # Preserve Unix executable permissions for macOS and Linux archives
+    if ($rid -like "osx-*" -or $rid -like "linux-*") {
+        Set-UnixExecutableAttributesInZip -ZipFilePath $zipPath
+    }
 
     # Compute SHA256
     $hash = (Get-FileHash -Path $zipPath -Algorithm SHA256).Hash.ToLowerInvariant()
@@ -86,6 +129,9 @@ $universalZip = "devstack-studio-0.1.0-universal-offline.zip"
 $universalPath = "$distDir/$universalZip"
 Write-Host "    Compressing Universal Offline Bundle to $universalZip..." -ForegroundColor Gray
 Compress-Archive -Path "$universalStaging/*" -DestinationPath $universalPath -Force
+
+# Patch Unix permissions for scripts and binaries across all platforms inside universal bundle
+Set-UnixExecutableAttributesInZip -ZipFilePath $universalPath
 
 $universalHash = (Get-FileHash -Path $universalPath -Algorithm SHA256).Hash.ToLowerInvariant()
 Set-Content -Path "$universalPath.sha256" -Value "$universalHash  $universalZip"
