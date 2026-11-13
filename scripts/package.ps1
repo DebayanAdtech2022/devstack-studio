@@ -120,9 +120,8 @@ foreach ($rid in $targets) {
     Copy-Item -Path "$OutputDir/$rid" -Destination "$universalStaging/platforms/$rid" -Recurse
 }
 
-# Copy the universal standalone launchers (run.sh, run.cmd, install.bat for Windows, install.command for macOS & Linux)
-Copy-Item -Path "run.sh" -Destination "$universalStaging/run.sh"
-Copy-Item -Path "run.cmd" -Destination "$universalStaging/run.cmd"
+# Copy the universal standalone launchers (run.bat polyglot, install.bat for Windows, install.command for macOS & Linux)
+Copy-Item -Path "run.bat" -Destination "$universalStaging/run.bat"
 Copy-Item -Path "scripts/install.bat" -Destination "$universalStaging/install.bat"
 Copy-Item -Path "scripts/install.command" -Destination "$universalStaging/install.command"
 Copy-Item -Path "scripts/launcher.ps1" -Destination "$universalStaging/launcher.ps1"
