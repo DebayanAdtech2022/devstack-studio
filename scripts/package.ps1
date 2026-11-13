@@ -8,6 +8,7 @@ $ErrorActionPreference = "Stop"
 # Automatically resolve and anchor to repository root
 $repoRoot = (Resolve-Path "$PSScriptRoot/..").Path
 Set-Location $repoRoot
+[System.IO.Directory]::SetCurrentDirectory($repoRoot)
 
 $targets = @(
     "win-x64",
@@ -35,8 +36,9 @@ function Set-UnixExecutableAttributesInZip {
     param([string]$ZipFilePath)
 
     if (-not (Test-Path $ZipFilePath)) { return }
+    $resolvedPath = (Resolve-Path $ZipFilePath).Path
 
-    $bytes = [System.IO.File]::ReadAllBytes($ZipFilePath)
+    $bytes = [System.IO.File]::ReadAllBytes($resolvedPath)
     # Central Directory signature: PK\x01\x02 -> 0x50, 0x4b, 0x01, 0x02
     for ($i = 0; $i -lt ($bytes.Length - 46); $i++) {
         if ($bytes[$i] -eq 0x50 -and $bytes[$i+1] -eq 0x4b -and $bytes[$i+2] -eq 0x01 -and $bytes[$i+3] -eq 0x02) {
@@ -50,7 +52,8 @@ function Set-UnixExecutableAttributesInZip {
             if ($fileName.EndsWith("DevStackStudio.App") -or 
                 $fileName.EndsWith(".dylib") -or 
                 $fileName.EndsWith(".command") -or 
-                $fileName.EndsWith(".sh")) {
+                $fileName.EndsWith(".sh") -or 
+                $fileName.EndsWith("run.bat")) {
                 
                 # Set Host OS byte to 3 (Unix)
                 $bytes[$i + 5] = 3
@@ -65,7 +68,7 @@ function Set-UnixExecutableAttributesInZip {
         }
     }
 
-    [System.IO.File]::WriteAllBytes($ZipFilePath, $bytes)
+    [System.IO.File]::WriteAllBytes($resolvedPath, $bytes)
 }
 
 foreach ($rid in $targets) {
