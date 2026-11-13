@@ -86,6 +86,12 @@ foreach ($rid in $targets) {
         Write-Error "Publish failed for $rid."
     }
 
+    # Copy universal launchers and scripts into each platform folder so user has run.bat / install.command right in their download
+    Copy-Item -Path "run.bat" -Destination "$targetPubDir/run.bat" -Force
+    Copy-Item -Path "scripts/install.bat" -Destination "$targetPubDir/install.bat" -Force
+    Copy-Item -Path "scripts/install.command" -Destination "$targetPubDir/install.command" -Force
+    Copy-Item -Path "scripts/launcher.ps1" -Destination "$targetPubDir/launcher.ps1" -Force
+
     # Create ZIP archive for this platform
     $zipName = "devstack-studio-0.1.0-$rid.zip"
     $zipPath = "$distDir/$zipName"

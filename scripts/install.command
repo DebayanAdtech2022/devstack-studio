@@ -235,9 +235,15 @@ fi
 # ==============================================================================
 # Locate and launch executable (with instant docker group elevation if needed)
 # ==============================================================================
-TARGET_DIR="$SCRIPT_DIR/platforms/$RID"
-EXE="$TARGET_DIR/DevStackStudio.App"
+# 1. Check if binary is sitting right next to this script (single-platform zip extraction)
+EXE="$SCRIPT_DIR/DevStackStudio.App"
 
+# 2. Check universal package structure: platforms/$RID/DevStackStudio.App
+if [ ! -f "$EXE" ]; then
+    EXE="$SCRIPT_DIR/platforms/$RID/DevStackStudio.App"
+fi
+
+# 3. Check dev repo artifacts directory
 if [ ! -f "$EXE" ]; then
     ALT_EXE="$SCRIPT_DIR/../artifacts/publish/$RID/DevStackStudio.App"
     if [ -f "$ALT_EXE" ]; then

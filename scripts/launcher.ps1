@@ -53,7 +53,13 @@ if (-not $hasDocker) {
 }
 
 # 2. Locate and launch the application executable
-$exe = Join-Path $repoOrBundleRoot "platforms\$rid\DevStackStudio.App.exe"
+# Check direct location first (single platform distribution)
+$exe = Join-Path $repoOrBundleRoot "DevStackStudio.App.exe"
+
+# If not found directly, check universal package platforms directory
+if (-not (Test-Path $exe)) {
+    $exe = Join-Path $repoOrBundleRoot "platforms\$rid\DevStackStudio.App.exe"
+}
 
 # If running directly inside repo or artifacts structure
 if (-not (Test-Path $exe)) {
