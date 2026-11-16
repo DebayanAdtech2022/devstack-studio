@@ -42,3 +42,8 @@ if %ERRORLEVEL% NEQ 0 (
 echo Launching DevStack Studio Control Plane...
 start "" "%EXE%" %*
 exit /b 0
+
+
+echo Launching DevStack Studio Control Plane...
+start "" "%EXE%" %*
+exit /b 0
