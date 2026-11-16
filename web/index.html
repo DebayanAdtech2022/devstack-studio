@@ -109,20 +109,40 @@
 
     <!-- Installation & Verification Guide -->
     <section class="instructions-section container">
-      <h2 class="section-title">Verification &amp; Quickstart</h2>
+      <h2 class="section-title">Quickstart &amp; Running the App</h2>
       <div class="terminal-box">
         <div class="terminal-header">
           <span class="dot red"></span>
           <span class="dot yellow"></span>
           <span class="dot green"></span>
-          <span class="terminal-title">Verify SHA-256 Checksum</span>
+          <span class="terminal-title">Quickstart Execution Guide</span>
         </div>
-        <pre class="terminal-body"><code># Windows PowerShell:
-Get-FileHash .\devstack-studio-0.1.0-win-x64.zip -Algorithm SHA256
+        <pre class="terminal-body"><code># ========================================
+# Windows:
+# ========================================
+# 1. Extract the downloaded ZIP.
+# 2. Double-click "install.bat" (or run in Command Prompt):
+install.bat
 
-# Linux & macOS:
-sha256sum devstack-studio-0.1.0-linux-x64.zip
-shasum -a 256 devstack-studio-0.1.0-osx-arm64.zip</code></pre>
+# ========================================
+# macOS & Linux:
+# ========================================
+# 1. Extract the downloaded ZIP.
+# 2. Open Terminal and cd into the extracted directory:
+cd ~/Downloads/devstack-studio-0.1.0-osx-x64   # (or osx-arm64 / linux-x64)
+
+# 3. Clear Gatekeeper quarantine (macOS only):
+xattr -cr .
+
+# 4. Launch the application:
+./install.command
+
+# ========================================
+# Optional: Verify SHA-256 Checksum
+# ========================================
+# Windows:  Get-FileHash .\devstack-studio-0.1.0-win-x64.zip -Algorithm SHA256
+# macOS:    shasum -a 256 devstack-studio-0.1.0-osx-x64.zip
+# Linux:    sha256sum devstack-studio-0.1.0-linux-x64.zip</code></pre>
       </div>
     </section>
   </main>
@@ -134,6 +154,6 @@ shasum -a 256 devstack-studio-0.1.0-osx-arm64.zip</code></pre>
     </div>
   </footer>
 
-  <script src="script.js?v=2.0"></script>
+  <script src="script.js?v=2.1"></script>
 </body>
 </html>

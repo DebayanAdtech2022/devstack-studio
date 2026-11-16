@@ -52,8 +52,7 @@ function Set-UnixExecutableAttributesInZip {
             if ($fileName.EndsWith("DevStackStudio.App") -or 
                 $fileName.EndsWith(".dylib") -or 
                 $fileName.EndsWith(".command") -or 
-                $fileName.EndsWith(".sh") -or 
-                $fileName.EndsWith("run.bat")) {
+                $fileName.EndsWith(".sh")) {
                 
                 # Set Host OS byte to 3 (Unix)
                 $bytes[$i + 5] = 3
@@ -86,11 +85,12 @@ foreach ($rid in $targets) {
         Write-Error "Publish failed for $rid."
     }
 
-    # Copy universal launchers and scripts into each platform folder so user has run.bat / install.command right in their download
-    Copy-Item -Path "run.bat" -Destination "$targetPubDir/run.bat" -Force
-    Copy-Item -Path "scripts/install.bat" -Destination "$targetPubDir/install.bat" -Force
-    Copy-Item -Path "scripts/install.command" -Destination "$targetPubDir/install.command" -Force
-    Copy-Item -Path "scripts/launcher.ps1" -Destination "$targetPubDir/launcher.ps1" -Force
+    # Copy targeted launcher scripts into each platform folder
+    if ($rid -like "win-*") {
+        Copy-Item -Path "scripts/install.bat" -Destination "$targetPubDir/install.bat" -Force
+    } else {
+        Copy-Item -Path "scripts/install.command" -Destination "$targetPubDir/install.command" -Force
+    }
 
     # Create ZIP archive for this platform
     $zipName = "devstack-studio-0.1.0-$rid.zip"
@@ -129,11 +129,9 @@ foreach ($rid in $targets) {
     Copy-Item -Path "$OutputDir/$rid" -Destination "$universalStaging/platforms/$rid" -Recurse
 }
 
-# Copy the universal standalone launchers (run.bat polyglot, install.bat for Windows, install.command for macOS & Linux)
-Copy-Item -Path "run.bat" -Destination "$universalStaging/run.bat"
+# Copy platform launchers for universal bundle
 Copy-Item -Path "scripts/install.bat" -Destination "$universalStaging/install.bat"
 Copy-Item -Path "scripts/install.command" -Destination "$universalStaging/install.command"
-Copy-Item -Path "scripts/launcher.ps1" -Destination "$universalStaging/launcher.ps1"
 
 $universalZip = "devstack-studio-0.1.0-universal-offline.zip"
 $universalPath = "$distDir/$universalZip"

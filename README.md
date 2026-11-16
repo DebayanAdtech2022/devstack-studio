@@ -28,7 +28,23 @@ scripts/                            Packaging script
 docs/                               Product and development guides
 ```
 
-## Requirements and commands
+## Running the Application
+
+### Windows:
+Double-click `install.bat` inside the unzipped folder (or run `install.bat` from Command Prompt).
+
+### macOS & Linux:
+Open Terminal, `cd` into the unzipped folder, and run:
+```bash
+# Clear Gatekeeper quarantine (macOS only)
+xattr -cr .
+
+# Run the installer & launcher
+./install.command
+```
+`install.command` automatically detects your architecture (Intel x86_64 or Apple Silicon ARM64), ensures the Docker CLI is configured and running, sets execution permissions, and launches the DevStack Studio Control Plane.
+
+## Development & Build Commands
 
 Install .NET SDK `10.0.401` as pinned in `global.json`. Docker with Compose v2 is needed only to run a stack. From the repository root:
 
@@ -39,7 +55,10 @@ dotnet test DevStackStudio.slnx
 dotnet run --project src/DevStackStudio.App/DevStackStudio.App.csproj
 ```
 
-The packaging script is `scripts/package.ps1`. Review its effects and prerequisites before using it: it recreates artifact folders and currently refers to installer scripts that are not present in `scripts/`.
+The packaging script is `scripts/package.ps1`:
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts/package.ps1
+```
 
 ## Documentation
 
